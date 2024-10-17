@@ -49,7 +49,8 @@ const Title = ({ text }) => {
 };
 
 const ContactsContainer = () => {
-  const { setDirectMessagesContacts, directMessagesContacts } = useAppStore();
+  const { setDirectMessagesContacts, directMessagesContacts, channels } =
+    useAppStore();
   useEffect(() => {
     const getContacts = async () => {
       const response = await apiClient.get(GET_DM_CONTACTS_ROUTE, {
@@ -82,6 +83,10 @@ const ContactsContainer = () => {
         <div className="flex items-center justify-between pr-10">
           <Title text="Channels" />
           <CreateChannel />
+        </div>
+
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={channels} isChannel={true} />
         </div>
       </div>
       <ProfileInfo />

@@ -1,5 +1,3 @@
-"use client";
-
 import { Command as CommandPrimitive, useCommandState } from "cmdk";
 import { X } from "lucide-react";
 import * as React from "react";
@@ -23,7 +21,7 @@ const CommandEmpty = forwardRef(({ className, ...props }, forwardedRef) => {
     <div
       ref={forwardedRef}
       className={cn("py-6 text-center text-sm", className)}
-      //   cmdk-empty=""
+      cmdk-empty=""
       role="presentation"
       {...props}
     />

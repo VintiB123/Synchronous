@@ -13,51 +13,67 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getColor } from "@/lib/utils";
-import Lottie from "react-lottie";
+
 import { animationDefaultOptions } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
 import { apiClient } from "@/lib/api-client";
 import {
+  CREATE_CHANNEL_ROUTE,
   GET_ALL_CONTACTS_ROUTE,
-  SEARCH_CONTACT_ROUTES,
 } from "@/utils/constants";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarImage } from "@radix-ui/react-avatar";
+
 import { useAppStore } from "@/store";
-import { HOST } from "@/utils/constants";
+
 import { createChatSlice } from "@/store/slices/chat-slice";
 import MultipleSelector from "@/components/ui/multiselect";
 
 const CreateChannel = () => {
-  const { setSelectedChatType, setSelectedChatData } = useAppStore();
+  const { setSelectedChatType, setSelectedChatData, addChannel } =
+    useAppStore();
   const [newChannelModal, setNewChannelModal] = useState(false);
-  const [searchedContacts, setSearchedContacts] = useState([]);
   const [allContacts, setAllContacts] = useState([]);
-  const [selectedContacts, setSelectedContacts] = useState([]);
   const [channelName, setChannelName] = useState("");
-  const selectNewContact = (contact) => {
-    // setOpenNewContactModal(false);
-    setSelectedChatType("contact");
-    setSelectedChatData(contact);
-    setSearchedContacts([]);
-  };
+  const [selectedContacts, setSelectedContacts] = useState([]);
 
   useEffect(() => {
     const getData = async () => {
       const response = await apiClient.get(GET_ALL_CONTACTS_ROUTE, {
         withCredentials: true,
       });
-
+      console.log(response.data);
       setAllContacts(response.data.contacts);
     };
 
     getData();
   }, []);
 
-  const createChannel = async () => {};
+  const createChannel = async () => {
+    try {
+      if (channelName.length > 0 && selectedContacts.length > 0) {
+        const response = await apiClient.post(
+          CREATE_CHANNEL_ROUTE,
+          {
+            name: channelName,
+            members: selectedContacts.map((contact) => contact.value),
+          },
+          {
+            withCredentials: true,
+          }
+        );
+        if (response.status === 200) {
+          setChannelName("");
+          setSelectedContacts([]);
+          setNewChannelModal(false);
+          addChannel(response.data.channel);
+        }
+      }
+    } catch (error) {
+      console.log({ error });
+    }
+  };
   return (
     <>
       <TooltipProvider>
