@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const ChannelSchema = new mongoose.Schema({
+const channelSchema = new mongoose.Schema({
   name: { type: String, required: true },
 
   members: [
@@ -22,9 +22,14 @@ const ChannelSchema = new mongoose.Schema({
   },
 });
 
-ChannelScheme.pre("findOneAndUpdate", function (next) {
+channelSchema.pre("save", function (next) {
+  this.updateAt = Date.now();
+  next();
+});
+channelSchema.pre("findOneAndUpdate", function (next) {
   this.set({ updateAt: Date.now() });
   next();
 });
 
-const Channel = mongoose("Channels", ChannelSchema);
+const Channel = mongoose.model("Channels", channelSchema);
+export default Channel;

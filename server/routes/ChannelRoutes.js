@@ -1,9 +1,12 @@
 import { Router } from "express";
 import { verifyToken } from "../middleware/AuthMiddleware.js";
-import { createChannel } from "../controllers/ChannelControllers";
+import {
+  createChannel,
+  getUserChannels,
+} from "../controllers/ChannelControllers.js";
 
 const channelRoutes = Router();
 
 channelRoutes.post("/create-channel", verifyToken, createChannel);
-
+channelRoutes.get("/get-user-channels", verifyToken, getUserChannels);
 export default channelRoutes;
