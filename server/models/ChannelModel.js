@@ -1,17 +1,27 @@
 import mongoose from "mongoose";
+import User from "./UserModel.js";
+import Message from "./MessagesModel.js";
 
 const channelSchema = new mongoose.Schema({
   name: { type: String, required: true },
 
   members: [
     {
-      type: mongoose.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "Users",
       required: true,
     },
   ],
-  admin: { type: mongoose.Types.ObjectId, ref: "Users", required: true },
-  messages: { type: mongoose.Types.ObjectId, ref: "Messages", required: false },
+  admin: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    required: true,
+  },
+  messages: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Messages",
+    required: false,
+  },
   createdAt: {
     type: Date,
     default: Date.now(),
@@ -23,11 +33,11 @@ const channelSchema = new mongoose.Schema({
 });
 
 channelSchema.pre("save", function (next) {
-  this.updateAt = Date.now();
+  this.updatedAt = Date.now();
   next();
 });
 channelSchema.pre("findOneAndUpdate", function (next) {
-  this.set({ updateAt: Date.now() });
+  this.set({ updatedAt: Date.now() });
   next();
 });
 

@@ -161,7 +161,7 @@ const MessageContainer = () => {
     return (
       <div
         className={`mt-5 ${
-          message._sender._id !== userInfo.id ? "text-left" : "text-right"
+          message.sender._id !== userInfo.id ? "text-left" : "text-right"
         }`}
       >
         {message.messageType === "text" && (

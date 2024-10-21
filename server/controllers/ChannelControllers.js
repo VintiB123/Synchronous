@@ -35,8 +35,25 @@ export const getUserChannels = async (request, response, next) => {
 
     const channels = await Channel.find({
       $or: [{ admin: userId }, { members: userId }],
-    }).sort({ updateAt: -1 });
+    }).sort({ updatedAt: -1 });
 
+    return response.status(201).json({ channels });
+  } catch (error) {
+    console.log({ error });
+    return response.status(500).send("Internal Server Error ");
+  }
+};
+
+export const getChannelMessages = async (request, response, next) => {
+  try {
+    const { channelId } = request.params;
+    const channel = await Channel.findById(channelId).populate({
+      path: "messages",
+      populate: {
+        path: "sender",
+        select: "firstName lastName",
+      },
+    });
     return response.status(201).json({ channels });
   } catch (error) {
     console.log({ error });
