@@ -65,7 +65,7 @@ const setupSocket = (server) => {
     const finalData = { ...messageData._doc, channelId: channel._id };
 
     if (channel && channel.members) {
-      console.log("mEMBERS:", channel.members);
+      //console.log("mEMBERS:", channel.members);
       channel.members.forEach((member) => {
         const memberSocketId = userSocketMap.get(member._id.toString());
 

@@ -2,7 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { useAppStore } from "@/store";
 import moment from "moment";
 import { apiClient } from "@/lib/api-client";
-import { GET_ALL_MESSAGE_ROUTE, HOST } from "@/utils/constants.js";
+import {
+  GET_ALL_MESSAGE_ROUTE,
+  GET_CHANNEL_MESSAGES_ROUTE,
+  HOST,
+} from "@/utils/constants.js";
 import { MdFolderZip } from "react-icons/md";
 import { IoMdArrowRoundDown } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
@@ -35,6 +39,7 @@ const MessageContainer = () => {
   };
   useEffect(() => {
     if (selectedChatData._id) {
+      console.log("selectedChatData:", selectedChatData._id);
       const getMessages = async () => {
         try {
           const response = await apiClient.post(
@@ -49,7 +54,20 @@ const MessageContainer = () => {
           console.error({ error });
         }
       };
+      const getChannelMessages = async () => {
+        try {
+          const response = await apiClient.get(
+            `${GET_CHANNEL_MESSAGES_ROUTE}/${selectedChatData._id}`,
+            { id: selectedChatData._id },
+            { withCredentials: true }
+          );
+          console.log(response.data);
+        } catch (error) {
+          console.error({ error });
+        }
+      };
       if (selectedChatType === "contact") getMessages();
+      else if (selectedChatType === "channel") getChannelMessages();
     }
   }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
   const renderMessages = () => {

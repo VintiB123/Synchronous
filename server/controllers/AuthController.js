@@ -99,8 +99,8 @@ export const getUserInfo = async (request, response, next) => {
 
 export const updateProfile = async (request, response, next) => {
   try {
-    console.log("Request userId:", request.userId); // Ensure userId is set
-    console.log("Request body:", request.body);
+    // console.log("Request userId:", request.userId); // Ensure userId is set
+    // console.log("Request body:", request.body);
     const { userId } = request;
     const { firstName, lastName, color } = request.body;
     if (!firstName || !lastName) {
