@@ -58,10 +58,13 @@ const MessageContainer = () => {
         try {
           const response = await apiClient.get(
             `${GET_CHANNEL_MESSAGES_ROUTE}/${selectedChatData._id}`,
-            { id: selectedChatData._id },
+            // { id: selectedChatData._id },
             { withCredentials: true }
           );
-          console.log(response.data);
+          if (response.data.messages) {
+            setSelectedChatMessages(response.data.messages);
+          }
+          // console.log(response.data);
         } catch (error) {
           console.error({ error });
         }
@@ -69,7 +72,7 @@ const MessageContainer = () => {
       if (selectedChatType === "contact") getMessages();
       else if (selectedChatType === "channel") getChannelMessages();
     }
-  }, [selectedChatData, selectedChatType, setSelectedChatMessages]);
+  }, [selectedChatData, selectedChatType, selectedChatMessages]);
   const renderMessages = () => {
     let lastDate = null;
     return selectedChatMessages.map((message, index) => {

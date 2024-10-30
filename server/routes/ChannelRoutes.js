@@ -12,7 +12,7 @@ channelRoutes.post("/create-channel", verifyToken, createChannel);
 channelRoutes.get("/get-user-channels", verifyToken, getUserChannels);
 channelRoutes.get(
   "/get-channel-messages/:channelId",
-  // verifyToken,
+  verifyToken,
   getChannelMessages
 );
 export default channelRoutes;
